@@ -1,8 +1,9 @@
-function [CovBEF,EigValBEF] = BEF(SampleRet,distribution,spacing,RollingCorr)
-% Author: Torsten MÃ¶rstedt, Bernhard Lutz, Dirk Neumann
-% Function calculates the Bayesian Eigenvalue Rescaling Covariance Matrix as
-% outlined in "Bayesian Bayesian Eigenvalue Rescaling for CovarianceEstimation in Portfolio Optimization"
-% Setting used in the paper: [CovBEF,EigValBEF] = fnBEF(ReturnMatrix,'Beta_2_6','Linear',HistoricRollingCorrelationVector)
+function [CovBER,EigValBER] = BER(SampleRet,distribution,spacing,RollingCorr)
+% Author: Torsten Mörstedt, Bernhard Lutz, Dirk Neumann @ University of
+% Freiburg, Chair of Information Systems Research
+% Function calculates the Bayesian Eigenvalue Rescaled Covariance as
+% outlined in "Bayesian Eigenvalue Rescaling for Covariance Estimation in Portfolio Optimization"
+% Setting used in the paper: [CovBER,EigValBER] = fnBER(ReturnMatrix,'Beta_2_6','Linear',HistoricRollingCorrelationVector)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Mandatory Input:   
 %       SampleRet: TxN matrix of asset returns
@@ -12,30 +13,30 @@ function [CovBEF,EigValBEF] = BEF(SampleRet,distribution,spacing,RollingCorr)
 %       RollingCorr: 1xT matrix of rolling average cross-correlation values based on the
 %       return matrix basket
 % Example: 
-%       [CovBEF,EigValBEF] = BEF(randn(100,10),'Normal','Log',[0.4,0.35,0.3]);
+%       [CovBER,EigValBER] = BER(randn(100,10),'Normal','Log',[0.4,0.35,0.3]);
 %           randn(100,10):  TxN matrix of asset returns
 %           [0.4,0.35,0.3]: 1xT matrix of rolling average cross-correlation 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Management of input variables
     if nargin < 2
-        distribution = 'normal'; 
+        distribution = 'Beta_2_6'; 
     end
     if nargin < 3
-        spacing = 'Log';
+        spacing      = 'Linear';
     end
     if nargin < 4
-        tempCorr = corr(SampleRet);
+        tempCorr    = corr(SampleRet);
         tempCorr(eye(size(tempCorr,1))) = NaN;
         RollingCorr = nanmean(nanmean(tempCorr));
     end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% BEF Covariance
+% BER Covariance
     CovSample                       = cov(SampleRet);
-    [EigValBEF,EigVecBEF]           = BEF_Inference(RollingCorr,CovSample,distribution,spacing); % Infere Bayesian eigenvalues  
-    CovBEF                          = EigVecBEF*sqrt(diag(EigValBEF))*inv(EigVecBEF); % Recreate (Bayesian Eigenvalue Fitted) Covariance matrix 
+    [EigValBER,EigVecBER]           = BER_Inference(RollingCorr,CovSample,distribution,spacing); % Infere Bayesian eigenvalues  
+    CovBER                          = EigVecBER*sqrt(diag(EigValBER))*inv(EigVecBER);            % Recreate (Bayesian Eigenvalue Rescaled) Covariance matrix 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end
 
