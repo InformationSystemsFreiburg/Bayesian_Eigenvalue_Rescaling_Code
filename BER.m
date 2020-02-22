@@ -3,7 +3,7 @@ function [CovBER,EigValBER] = BER(SampleRet,distribution,spacing,RollingCorr)
 % Freiburg, Chair of Information Systems Research
 % Function calculates the Bayesian Eigenvalue Rescaled Covariance as
 % outlined in "Bayesian Eigenvalue Rescaling for Covariance Estimation in Portfolio Optimization"
-% Setting used in the paper: [CovBER,EigValBER] = fnBER(ReturnMatrix,'Beta_2_6','Linear',HistoricRollingCorrelationVector)
+% Setting used in the paper: [CovBER,EigValBER] = BER(ReturnMatrix,'Beta_2_6','Linear',HistoricRollingCorrelationVector)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Mandatory Input:   
 %       SampleRet: TxN matrix of asset returns
